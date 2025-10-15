@@ -1,3 +1,4 @@
 name = "hono-test"
 main = "src/api/server.ts"
 compatibility_date = "2025-10-15"
+compatibility_flags = ["nodejs_compat", "enable_nodejs_http_modules", "enable_nodejs_http_server_modules"]
