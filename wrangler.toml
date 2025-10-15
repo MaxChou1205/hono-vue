@@ -1,0 +1,3 @@
+name = "hono-test"
+main = "src/api/server.ts"
+compatibility_date = "2025-10-15"
