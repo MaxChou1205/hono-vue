@@ -11,30 +11,34 @@ const app = new Hono();
 app.use('*', cors());
 
 // API 路由
-app.route('/api', hello).route('/api', feeds);
+const routes = app.route('/api', hello).route('/api', feeds);
 
 // ⭐ Production 模式配置
-if (isProd) {
-  console.log('Production mode');
+// if (isProd) {
+//   console.log('Production mode');
 
-  // 1. 服務靜態資源檔案（CSS, JS, 圖片等）
-  app.use('/assets/*', serveStatic({ root: './dist/client' }));
+//   // 1. 服務靜態資源檔案（CSS, JS, 圖片等）
+//   app.use('/assets/*', serveStatic({ root: './dist/client' }));
 
-  // 2. 處理所有其他請求，返回 index.html（SPA fallback）
-  app.get(
-    '*',
-    serveStatic({
-      path: './dist/client/index.html',
-    }),
-  );
-}
+//   // 2. 處理所有其他請求，返回 index.html（SPA fallback）
+//   app.get(
+//     '*',
+//     serveStatic({
+//       path: './dist/client/index.html',
+//     }),
+//   );
+// }
 
-const port = 3005;
-console.log(`Server is running on port ${port}`);
+// const port = 3005;
+// console.log(`Server is running on port ${port}`);
 
-serve({
+// serve({
+//   fetch: app.fetch,
+//   port,
+// });
+
+export default {
+  port: 3005,
   fetch: app.fetch,
-  port,
-});
-
-export default app;
+};
+export type RoutesController = typeof routes;
