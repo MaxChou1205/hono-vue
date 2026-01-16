@@ -1,4 +1,3 @@
-import { serve } from '@hono/node-server';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
@@ -14,31 +13,23 @@ app.use('*', cors());
 const routes = app.route('/api', hello).route('/api', feeds);
 
 // ⭐ Production 模式配置
-// if (isProd) {
-//   console.log('Production mode');
+if (isProd) {
+  console.log('Production mode');
 
-//   // 1. 服務靜態資源檔案（CSS, JS, 圖片等）
-//   app.use('/assets/*', serveStatic({ root: './dist/client' }));
+  // 1. 服務靜態資源檔案（CSS, JS, 圖片等）
+  app.use('/assets/*', serveStatic({ root: './dist/client' }));
 
-//   // 2. 處理所有其他請求，返回 index.html（SPA fallback）
-//   app.get(
-//     '*',
-//     serveStatic({
-//       path: './dist/client/index.html',
-//     }),
-//   );
-// }
-
-// const port = 3005;
-// console.log(`Server is running on port ${port}`);
-
-// serve({
-//   fetch: app.fetch,
-//   port,
-// });
+  // 2. 處理所有其他請求，返回 index.html（SPA fallback）
+  app.get(
+    '*',
+    serveStatic({
+      path: './dist/client/index.html',
+    }),
+  );
+}
 
 export default {
-  port: 3005,
+  port: Number(process.env.PORT) || 3005,
   fetch: app.fetch,
 };
 export type RoutesController = typeof routes;
