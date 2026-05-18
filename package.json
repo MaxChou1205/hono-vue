@@ -16,7 +16,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "deploy": "gcloud run deploy hono-vue-app --source . --platform managed --region asia-east1 --allow-unauthenticated",
-    "deploy:worker": "npx wrangler deploy .\\dist\\api\\server.js"
+    "deploy:worker": "npx wrangler deploy ./dist/api/server.js"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.5",
