@@ -4,43 +4,47 @@ import { z } from "zod";
 
 const hello = new Hono();
 
-hello.get(
-  "/hello",
-  zValidator(
-    "query",
-    z.object({
-      name: z.string(),
-    }),
-  ),
-  (c) => {
-    const { name } = c.req.valid("query");
-    return c.json({
-      message: `Hello! ${name}`,
-    });
-  },
-);
-
-hello.get("/token", async (c) => {
-  const userCode = c.req.query("userCode") || "KTA-max";
-  const password = c.req.query("password") || "Aa1234567";
-  const lineId = c.req.query("lineId") || "1568126";
-  const clientId = c.req.query("clientId") || "7761bedc-12e4-4768-b173-bb0c8e99e12f";
-
-  const requestOptions = {
-    method: "GET",
-    redirect: "follow",
-    headers: {
-      "Content-Type": "application/json",
+const route = hello
+  .get(
+    "/hello",
+    zValidator(
+      "query",
+      z.object({
+        name: z.string(),
+      }),
+    ),
+    (c) => {
+      const { name } = c.req.valid("query");
+      return c.json({
+        message: `Hello! ${name}`,
+      });
     },
-  };
+  )
+  .get("/token", async (c) => {
+    const userCode = c.req.query("userCode") || "KTA-max";
+    const password = c.req.query("password") || "Aa1234567";
+    const lineId = c.req.query("lineId") || "1568126";
+    const clientId = c.req.query("clientId") || "7761bedc-12e4-4768-b173-bb0c8e99e12f";
 
-  const res = await fetch(
-    `https://dmsuatapi.volvocartw.com/openapi/bff-sales-line/auth/token?lineId=${lineId}&userCode=${userCode}&password=${password}&clientId=${clientId}`,
-    requestOptions as RequestInit,
-  );
-  const data = await res.json();
-  return c.json(data);
-});
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-export type HelloController = typeof hello;
+    try {
+      const res = await fetch(
+        `https://dmsuatapi.volvocartw.com/openapi/bff-sales-line/auth/token?lineId=${lineId}&userCode=${userCode}&password=${password}&clientId=${clientId}`,
+        requestOptions as RequestInit,
+      );
+      const data = await res.json();
+      return c.json(data);
+    } catch (error: any) {
+      return c.json(error);
+    }
+  });
+
+export type HelloController = typeof route;
 export default hello;
